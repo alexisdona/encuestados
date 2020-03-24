@@ -11,6 +11,12 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
     this.modelo.preguntaAgregada.suscribir(function() {
         contexto.reconstruirLista();
     });
+    this.modelo.preguntaBorrada.suscribir(function() {
+        contexto.reconstruirLista();
+    });
+    this.modelo.preguntaBorrada.suscribir(function() {
+        contexto.reconstruirLista();
+    });
 };
 
 
@@ -76,7 +82,18 @@ VistaAdministrador.prototype = {
             contexto.limpiarFormulario();
 
         });
-        //asociar el resto de los botones a eventos
+        e.botonEditarPregunta.click(function() {
+            var id = ($('.list-group-item.active').attr('id'));
+            contexto.controlador.editarPregunta(id);
+            contexto.reconstruirLista();
+            contexto.limpiarFormulario();
+
+        });
+        e.borrarTodo.click(function() {
+            contexto.controlador.borrarTodo();
+            contexto.reconstruirLista();
+            contexto.limpiarFormulario();
+        });
     },
 
     limpiarFormulario: function() {

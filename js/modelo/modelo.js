@@ -8,6 +8,8 @@ var Modelo = function() {
     //inicializacion de eventos
     this.preguntaAgregada = new Evento(this);
     this.preguntaBorrada = new Evento(this);
+    this.preguntaEditada = new Evento(this);
+    this.preguntasBorradas = new Evento(this);
 };
 
 
@@ -26,10 +28,19 @@ Modelo.prototype = {
         this.guardar();
         this.preguntaAgregada.notificar();
     },
+    borrarTodo: function() {
+        this.preguntas = [];
+        this.preguntasBorradas.notificar();
+    },
 
     borrarPregunta: function(id) {
         this.preguntas.splice(id, 1);
         this.preguntaBorrada.notificar();
+    },
+    editarPregunta: function(id) {
+        var nombrePregunta = prompt("Edite el nombre de la pregunta");
+        this.preguntas[id].texto = nombrePregunta;
+        this.preguntaEditada.notificar();
     },
 
     //se guardan las preguntas

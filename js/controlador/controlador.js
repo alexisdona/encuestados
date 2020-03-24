@@ -11,7 +11,12 @@ Controlador.prototype = {
         this.modelo.agregarPregunta(pregunta, respuestas);
     },
     borrarPregunta: function(id) {
-        // console.log('Entra en controlador.agregarPregunta');
         this.modelo.borrarPregunta(id);
+    },
+    editarPregunta: function(id) {
+        this.modelo.editarPregunta(id);
+    },
+    borrarTodo: function() {
+        this.modelo.borrarTodo();
     },
 };
