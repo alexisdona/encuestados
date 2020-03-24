@@ -28,7 +28,6 @@ VistaAdministrador.prototype = {
     construirElementoPregunta: function(pregunta) {
         var contexto = this;
         var nuevoItem = $('<li/>', { 'id': pregunta.id, 'class': 'list-group-item' }).text(pregunta.texto);
-        console.log('pregunta.textoPregunta ' + pregunta.texto);
         var interiorItem = $('.d-flex');
         var titulo = interiorItem.find('h5');
         titulo.text(pregunta.texto);
@@ -72,7 +71,10 @@ VistaAdministrador.prototype = {
         });
         e.botonBorrarPregunta.click(function() {
             var id = ($('.list-group-item.active').attr('id'));
-            console.log("id de la pregunta" + id);
+            contexto.controlador.borrarPregunta(id);
+            contexto.reconstruirLista();
+            contexto.limpiarFormulario();
+
         });
         //asociar el resto de los botones a eventos
     },
