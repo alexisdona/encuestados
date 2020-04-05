@@ -14,7 +14,7 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
     this.modelo.preguntaBorrada.suscribir(function() {
         contexto.reconstruirLista();
     });
-    this.modelo.preguntaBorrada.suscribir(function() {
+    this.modelo.preguntasBorradas.suscribir(function() {
         contexto.reconstruirLista();
     });
 };
@@ -23,8 +23,6 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
 VistaAdministrador.prototype = {
     //lista
     inicializar: function() {
-        //llamar a los metodos para reconstruir la lista, configurar botones y validar formularios
-
         this.reconstruirLista();
         this.configuracionDeBotones();
         validacionDeFormulario();
@@ -45,34 +43,40 @@ VistaAdministrador.prototype = {
     },
 
     reconstruirLista: function() {
-
         var lista = this.elementos.lista;
         lista.html('');
-        var preguntas = this.modelo.preguntas;
+        var preguntas = this.modelo.getPreguntas();
         for (var i = 0; i < preguntas.length; ++i) {
             lista.append(this.construirElementoPregunta(preguntas[i]));
         }
+
     },
 
     configuracionDeBotones: function() {
         var e = this.elementos;
         var contexto = this;
 
+
         //asociacion de eventos a boton
         e.botonAgregarPregunta.click(function() {
-            var value = e.pregunta.val();
+            var pregunta = e.pregunta.val();
             var respuestas = [];
 
             $('[name="option[]"]').each(function() {
-
                 var respuesta = { 'textoRespuesta': $(this).val(), 'cantidad': 0 };
                 if ($(this).val() != "") { //pongo este if porque esta agregando siempre una respuesta vacía al final
                     respuestas.push(respuesta);
                 }
             });
+
+
+            if (pregunta != "") {
+                contexto.controlador.agregarPregunta(pregunta, respuestas);
+            } else {
+                alert("Debe ingresar una pregunta para agregar");
+            }
             contexto.reconstruirLista();
             contexto.limpiarFormulario();
-            contexto.controlador.agregarPregunta(value, respuestas);
 
         });
         e.botonBorrarPregunta.click(function() {
@@ -84,7 +88,10 @@ VistaAdministrador.prototype = {
         });
         e.botonEditarPregunta.click(function() {
             var id = ($('.list-group-item.active').attr('id'));
-            contexto.controlador.editarPregunta(id);
+            do {
+                var textoPregunta = prompt("Edite el nombre de la pregunta");
+            } while (textoPregunta == "");
+            contexto.controlador.editarPregunta(id, textoPregunta);
             contexto.reconstruirLista();
             contexto.limpiarFormulario();
 
@@ -94,9 +101,10 @@ VistaAdministrador.prototype = {
             contexto.reconstruirLista();
             contexto.limpiarFormulario();
         });
+
     },
 
     limpiarFormulario: function() {
         $('.form-group.answer.has-feedback.has-success').remove();
-    }
+    },
 };
