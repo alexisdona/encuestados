@@ -61,6 +61,8 @@ VistaAdministrador.prototype = {
         e.botonAgregarPregunta.click(function() {
             var pregunta = e.pregunta.val();
             var respuestas = [];
+            var error = 0;
+            var errorMessage = "";
 
             $('[name="option[]"]').each(function() {
                 var respuesta = { 'textoRespuesta': $(this).val(), 'cantidad': 0 };
@@ -70,10 +72,19 @@ VistaAdministrador.prototype = {
             });
 
 
-            if (pregunta != "") {
+            if (pregunta == "") {
+                error = +1;
+                errorMessage += "Debe ingresar una pregunta para agregar\n";
+            }
+            if (respuestas.length == 0) {
+                error = +1;
+                errorMessage += "Debe agregar al menos una respuesta a la pregunta";
+            }
+
+            if (error == 0) {
                 contexto.controlador.agregarPregunta(pregunta, respuestas);
             } else {
-                alert("Debe ingresar una pregunta para agregar");
+                alert(errorMessage);
             }
             contexto.reconstruirLista();
             contexto.limpiarFormulario();
